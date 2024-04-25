@@ -1,4 +1,4 @@
-const mongoSanitize = require("express-mongo=sanitize");
+const mongoSanitize = require("express-mongo-sanitize");
 const express = require("express");
 const helmet = require("helmet");
 const xss = require("xss-clean");
