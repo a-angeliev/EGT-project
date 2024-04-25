@@ -3,23 +3,23 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 
 const userSchema = new mongoose.Schema({
-    first_name: { type: String, require: true },
-    last_name: { type: String, require: true },
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
     email: {
         type: String,
         unique: true,
         lowercase: true,
-        require: true,
+        required: true,
         validate: {
             validator: validator.isEmail,
             message: "Please enter a valid email",
         },
     },
-    password: { type: String, require: true },
-    address: { type: String, require: true },
+    password: { type: String, required: true },
+    address: { type: String, required: true },
     phone_number: {
         type: String,
-        require: true,
+        required: true,
         validate: {
             validator: async function (value) {
                 const existingUser = await this.constructor.findOne({ phone: value });
@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
             message: "This phone number is already in use",
         },
     },
-    birth_date: { type: Date, require: true },
+    birth_date: { type: Date, required: true },
     balance: { type: Number, default: 0 },
 });
 

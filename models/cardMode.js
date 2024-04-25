@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const cardSchema = new mongoose.Schema({
-    number: { type: String, require: true },
-    cardholder_name: { type: String, require: true },
-    expiration_date: { type: String, require: true },
+    number: { type: String, required: true },
+    cardholder_name: { type: String, required: true },
+    expiration_date: { type: String, required: true },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
