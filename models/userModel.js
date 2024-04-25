@@ -20,13 +20,7 @@ const userSchema = new mongoose.Schema({
     phone_number: {
         type: String,
         required: true,
-        validate: {
-            validator: async function (value) {
-                const existingUser = await this.constructor.findOne({ phone: value });
-                return !existingUser;
-            },
-            message: "This phone number is already in use",
-        },
+        unique: true,
     },
     birth_date: { type: Date, required: true },
     balance: { type: Number, default: 0 },
