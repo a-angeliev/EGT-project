@@ -1,7 +1,10 @@
-const mongoSanitize = require("express-mongo-sanitize");
 const express = require("express");
 const helmet = require("helmet");
+const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
+
+const authRouter = require("./routers/authRouter");
+const globalErrorHandler = require("./controllers/errorController");
 
 const app = express();
 
@@ -12,5 +15,10 @@ app.use(mongoSanitize());
 
 // Body parser and limiter
 app.use(express.json({ limit: "100kb" }));
+
+// Routes
+app.use("/api/v1/auth", authRouter);
+
+app.use(globalErrorHandler);
 
 module.exports = app;
