@@ -5,6 +5,7 @@ const xss = require("xss-clean");
 
 const authRouter = require("./src/routers/authRouter");
 const cardRouter = require("./src/routers/cardRouter");
+const transactionRouter = require("./src/routers/transactionRouter");
 const globalErrorHandler = require("./src/controllers/errorController");
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.json({ limit: "100kb" }));
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/card", cardRouter);
+app.use("/api/v1/transaction", transactionRouter);
 
 // Global error handler
 app.use(globalErrorHandler);
