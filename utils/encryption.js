@@ -4,7 +4,6 @@ const secretKey = process.env.ENCRYPTION_KEY;
 const iv = Buffer.alloc(16, 0); // Initialize IV with zeros (for AES)
 
 const encryptData = (data) => {
-    console.log("Key Length:", secretKey.length);
     const cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(secretKey, "utf-8"), iv);
     let encrypted = cipher.update(data, "utf8", "hex");
     encrypted += cipher.final("hex");

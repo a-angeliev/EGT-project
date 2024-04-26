@@ -7,6 +7,7 @@ const cardSchema = new mongoose.Schema({
     number: {
         type: String,
         required: true,
+        unique: true,
         validate: {
             validator: validateCardNumber,
             message: "Credit card number must consist of exactly 16 digits",
