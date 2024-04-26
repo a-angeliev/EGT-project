@@ -48,4 +48,19 @@ const transactionFunds = async (req, res, next) => {
     }
 };
 
-module.exports = { depositFunds, transactionFunds };
+const listUserTransactions = async (req, res, next) => {
+    try {
+        const transactionAsSender = await Transaction.find({ sender: req.user._id });
+        const transactionAsReceiver = await Transaction.find({ receiver: req.user._id });
+
+        res.status(200).json({
+            status: "success",
+            transaction_as_sender: transactionAsSender,
+            transaction_as_receiver: transactionAsReceiver,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports = { depositFunds, transactionFunds, listUserTransactions };
