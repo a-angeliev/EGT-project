@@ -7,17 +7,6 @@
     "start": "nodemon server.js",
     "test": "jest"
   },
-  "jest": {
-    "forceExit": true,
-    "verbose": true,
-    "clearMocks": true,
-    "coverageProvider": "v8",
- 
-    "testEnvironmentOptions": {
-      "url": "http://localhost:8080"
-    },
-    "testEnvironment": "node"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

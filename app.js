@@ -3,9 +3,9 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 
-const authRouter = require("./routers/authRouter");
-const cardRouter = require("./routers/cardRouter");
-const globalErrorHandler = require("./controllers/errorController");
+const authRouter = require("./src/routers/authRouter");
+const cardRouter = require("./src/routers/cardRouter");
+const globalErrorHandler = require("./src/controllers/errorController");
 
 const app = express();
 
