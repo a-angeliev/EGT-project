@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.route("/create").post(authController.protectMiddleware, cardController.createCard);
 router.route("/delete/:id").delete(authController.protectMiddleware, cardController.deleteCard);
+router.route("/").get(authController.protectMiddleware, cardController.listAllCards);
 
 module.exports = router;

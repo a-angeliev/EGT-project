@@ -12,7 +12,6 @@ const createCard = async (req, res, next) => {
         if (await validateMaxNumberCards(req.user)) {
             const new_card = await Card.create({ ...req.body, user: req.user._id });
             res.status(200).json({ status: "success", card_information: new_card });
-            next();
         } else {
             return next(
                 new AppError(
@@ -32,7 +31,7 @@ const deleteCard = async (req, res, next) => {
         const card = await Card.findById(id);
         if (card?.user._id.toString() === req.user._id.toString()) {
             await Card.findByIdAndDelete(id);
-            res.status(204);
+            res.status(204).json({ status: "success" });
         } else {
             return next(
                 new AppError("You don't have permissions to delete this card or this card doesn't exist!", 401)
@@ -43,4 +42,12 @@ const deleteCard = async (req, res, next) => {
     }
 };
 
-module.exports = { createCard, validateMaxNumberCards, deleteCard };
+const listAllCards = async (req, res, next) => {
+    try {
+        const cards = await Card.find({ user: req.user._id });
+        res.status(200).json({ status: "success", cards });
+    } catch (err) {
+        next(err);
+    }
+};
+module.exports = { createCard, validateMaxNumberCards, deleteCard, listAllCards };

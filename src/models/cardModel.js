@@ -34,17 +34,30 @@ const cardSchema = new mongoose.Schema({
     },
 });
 
+const cardFields = ["number", "cardholder_name", "expiration_date"];
+
+const hideNumberDigits = (number) => {
+    const lastDigits = number.slice(-4);
+    return lastDigits.padStart(16, "*");
+};
+
 cardSchema.pre("save", function (next) {
-    this.number = encryptData(this.number);
-    this.cardholder_name = encryptData(this.cardholder_name);
-    this.expiration_date = encryptData(this.expiration_date);
+    cardFields.forEach((field) => (this[field] = encryptData(this[field])));
     next();
 });
 
 cardSchema.post("save", function () {
-    this.number = decryptData(this.number);
-    this.cardholder_name = decryptData(this.cardholder_name);
-    this.expiration_date = decryptData(this.expiration_date);
+    cardFields.forEach((field) => {
+        this[field] = decryptData(this[field]);
+        if (field === "number") this.number = hideNumberDigits(this.number);
+    });
+});
+
+cardSchema.post("find", function (doc) {
+    doc.forEach((card) => {
+        cardFields.forEach((field) => (card[field] = decryptData(card[field])));
+        card.number = hideNumberDigits(card.number);
+    });
 });
 
 const Card = mongoose.model("Card", cardSchema);
