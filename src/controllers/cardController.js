@@ -26,4 +26,21 @@ const createCard = async (req, res, next) => {
     }
 };
 
-module.exports = { createCard };
+const deleteCard = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const card = await Card.findById(id);
+        if (card?.user._id.toString() === req.user._id.toString()) {
+            await Card.findByIdAndDelete(id);
+            res.status(204);
+        } else {
+            return next(
+                new AppError("You don't have permissions to delete this card or this card doesn't exist!", 401)
+            );
+        }
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports = { createCard, validateMaxNumberCards, deleteCard };
