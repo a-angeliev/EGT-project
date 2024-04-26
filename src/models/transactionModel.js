@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema({
-    sender: { type: String, required: true },
-    receiver: { type: String, required: true },
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    receiver: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     amount: { type: Number, required: true, min: [0, "Price must be greater than 0"] },
     transaction_date: { type: Date, default: new Date() },
 });
