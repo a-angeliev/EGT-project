@@ -5,7 +5,18 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
+  },
+  "jest": {
+    "forceExit": true,
+    "verbose": true,
+    "clearMocks": true,
+    "coverageProvider": "v8",
+ 
+    "testEnvironmentOptions": {
+      "url": "http://localhost:8080"
+    },
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +33,7 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.1.0"
   }
 }

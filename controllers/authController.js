@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 
+const AppError = require("./../utils/appError");
 const User = require("./../models/userModel");
 
 const signToken = (id) => {
@@ -10,6 +11,7 @@ const signToken = (id) => {
 
 const createSendToken = (user, statusCode, res) => {
     const token = signToken(user._id);
+
     const cookieOption = {
         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
         httpOnly: true,
@@ -37,4 +39,30 @@ const signup = async (req, res, next) => {
     }
 };
 
-module.exports = { signup };
+const protectMiddleware = async (req, res, next) => {
+    try {
+        let token;
+
+        if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+            token = req.headers.authorization.split(" ")[1];
+            if (token == "null") token = undefined;
+        }
+
+        if (!token) {
+            return next(new AppError("Invalid token. Please login or provide valid token.", 401));
+        }
+
+        const decode = jwt.verify(token, process.env.JWT_SECRET);
+        const currentUser = await User.findById(decode.id);
+        if (!currentUser) {
+            return next(new AppError("Invalid token. Please login or provide valid token.", 401));
+        }
+
+        req.user = currentUser;
+        next();
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports = { signup, signToken, createSendToken, protectMiddleware };

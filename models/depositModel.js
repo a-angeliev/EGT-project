@@ -7,7 +7,7 @@ const depositSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "Card",
     },
-    deposit_date: { type: Date, default: newDate() },
+    deposit_date: { type: Date, default: new Date() },
 });
 
 const Deposit = mongoose.model("Deposit", depositSchema);
