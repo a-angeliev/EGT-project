@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const { validateCardNumber, validateExpireDateFormat, validateExpireDate } = require("./../utils/validators");
+const { encryptData, decryptData } = require("./../utils/encryption");
 
 const cardSchema = new mongoose.Schema({
     number: {
@@ -30,6 +31,19 @@ const cardSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
+});
+
+cardSchema.pre("save", function (next) {
+    this.number = encryptData(this.number);
+    this.cardholder_name = encryptData(this.cardholder_name);
+    this.expiration_date = encryptData(this.expiration_date);
+    next();
+});
+
+cardSchema.post("save", function () {
+    this.number = decryptData(this.number);
+    this.cardholder_name = decryptData(this.cardholder_name);
+    this.expiration_date = decryptData(this.expiration_date);
 });
 
 const Card = mongoose.model("Card", cardSchema);
