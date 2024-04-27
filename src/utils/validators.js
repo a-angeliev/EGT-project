@@ -15,4 +15,8 @@ const validateExpireDate = (value) => {
     return Number(year) > currentYear || (Number(year) === currentYear && Number(month) > currentMonth);
 };
 
-module.exports = { validateCardNumber, validateExpireDateFormat, validateExpireDate };
+const validatePhoneNumber = (number) => {
+    return /^\d{10}$/.test(number) && number.startsWith("08");
+};
+
+module.exports = { validateCardNumber, validateExpireDateFormat, validateExpireDate, validatePhoneNumber };
