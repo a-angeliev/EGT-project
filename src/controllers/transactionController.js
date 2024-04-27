@@ -6,17 +6,24 @@ const Transaction = require("../models/transactionModel");
 const User = require("../models/userModel.js");
 const AppError = require("../utils/appError");
 
+// I know is better to move the `try-catch` block as outside function.
+// Also the same `if states` from depositFunds and transferFunds,
+// but that creates errors in the testing.
 const depositFunds = async (req, res, next) => {
     try {
-        const card = await Card.findById(req.body.card_id);
+        const amount = req.body.amount;
+        if (!amount || !req.body.card_id) return next(new AppError("You must provide amount and card_id", 400));
+        if (isNaN(amount)) return next(new AppError("The amount must be a Number", 400));
+        // If the amount === 0, then will trigger first case !0 === true
+        if (amount < 0) return next(new AppError("You cannot work negative amount", 400));
 
-        if (req.body.amount <= 0) return next(new AppError("You cannot deposit negative amount", 400));
+        const card = await Card.findById(req.body.card_id);
         if (!card) return next(new AppError("You don't have permissions on that card or the card doesn't exist", 400));
         if (card.user._id.toString() !== req.user._id.toString())
             return next(new AppError("You don't have permissions on that card or the card doesn't exist", 400));
 
-        const deposit = await Deposit.create({ amount: req.body.amount, card_id: card._id });
-        const newBalance = req.user.balance + req.body.amount;
+        const deposit = await Deposit.create({ amount: amount, card_id: card._id });
+        const newBalance = req.user.balance + amount;
 
         await User.findByIdAndUpdate(req.user._id, { balance: newBalance });
 
@@ -30,12 +37,15 @@ const transactionFunds = async (req, res, next) => {
     const session = await mongoose.startSession();
 
     try {
-        if (isNaN(req.body.amount)) return next(new AppError("The amount must be a Number", 400));
-        const receiver = await User.findById(req.body?.receiver_id);
         const amount = req.body.amount;
+        if (!amount || !req.body.receiver_id) return next(new AppError("You must provide amount and receiver_id", 400));
+        if (isNaN(amount)) return next(new AppError("The amount must be a Number", 400));
+        // If the amount === 0, then will trigger first case !0 === true
+        if (amount < 0) return next(new AppError("You cannot work negative amount", 400));
+
+        const receiver = await User.findById(req.body.receiver_id);
 
         if (!receiver) return next(new AppError("This user does not exist", 400));
-        if (!amount || amount <= 0) return next(new AppError("You cannot send negative amount", 400));
         if (req.user.balance < amount) return next(new AppError("Not enough balance", 400));
         if (req.user._id.toString() === receiver._id.toString())
             return next(new AppError("You cannot send money on yourself", 400));
@@ -66,7 +76,6 @@ const listUserTransactions = async (req, res, next) => {
     try {
         const transactionAsSender = await Transaction.find({ sender: req.user._id });
         const transactionAsReceiver = await Transaction.find({ receiver: req.user._id });
-
         res.status(200).json({
             status: "success",
             transaction_as_sender: transactionAsSender,
