@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const Deposit = require("./../models/depositModel");
 const Card = require("./../models/cardModel");
 const Transaction = require("../models/transactionModel");
@@ -17,6 +19,7 @@ const depositFunds = async (req, res, next) => {
         const newBalance = req.user.balance + req.body.amount;
 
         await User.findByIdAndUpdate(req.user._id, { balance: newBalance });
+
         res.status(200).json({ status: "success", deposit });
     } catch (err) {
         next(err);
@@ -24,6 +27,8 @@ const depositFunds = async (req, res, next) => {
 };
 
 const transactionFunds = async (req, res, next) => {
+    const session = await mongoose.startSession();
+
     try {
         if (isNaN(req.body.amount)) return next(new AppError("The amount must be a Number", 400));
         const receiver = await User.findById(req.body?.receiver_id);
@@ -38,12 +43,21 @@ const transactionFunds = async (req, res, next) => {
         const senderNewBalance = req.user.balance - amount;
         const receiverNewBalance = receiver.balance + amount;
 
+        // It's important to handle all updates together, because the process involves more than one users or records, depending each others.
+        session.startTransaction();
+
         await User.findByIdAndUpdate(req.user._id, { balance: senderNewBalance });
         await User.findByIdAndUpdate(req.body.receiver_id, { balance: receiverNewBalance });
         await Transaction.create({ sender: req.user._id, receiver: receiver._id, amount: amount });
 
+        await session.commitTransaction();
+        session.endSession();
+
         res.status(200).json({ status: "success" });
     } catch (err) {
+        await session.abortTransaction();
+        session.endSession();
+
         next(err);
     }
 };
