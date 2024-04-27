@@ -33,6 +33,25 @@ const signup = async (req, res, next) => {
     }
 };
 
+const login = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return next(new AppError("You must provide email and password", 400));
+        }
+
+        const user = await User.findOne({ email }).select("+password");
+        if (!user || !(await user.correctPassword(password, user.password))) {
+            return next(new AppError("Wrong email or password", 401));
+        }
+
+        createSendToken(user, 200, res);
+    } catch (err) {
+        next(err);
+    }
+};
+
 const protectMiddleware = async (req, res, next) => {
     try {
         let token;
@@ -59,4 +78,4 @@ const protectMiddleware = async (req, res, next) => {
     }
 };
 
-module.exports = { signup, signToken, createSendToken, protectMiddleware };
+module.exports = { signup, signToken, createSendToken, protectMiddleware, login };
