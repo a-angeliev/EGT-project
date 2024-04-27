@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
-const AppError = require("../utils/appError");
-const { signup, signToken, createSendToken, protectMiddleware } = require("../controllers/authController");
+const User = require("../../models/userModel");
+const AppError = require("../../utils/appError");
+const { signup, signToken, createSendToken, protectMiddleware } = require("../../controllers/authController");
 
 jest.mock("jsonwebtoken");
-jest.mock("../models/userModel");
-jest.mock("../utils/appError");
+jest.mock("../../models/userModel");
+jest.mock("../../utils/appError");
 
 describe("signToken", () => {
     it("throws an error when its not provided id", () => {
@@ -27,19 +27,19 @@ describe("signToken", () => {
 });
 
 describe("createSendToken", () => {
-    jest.mock("../controllers/authController", () => ({
-        ...jest.requireActual("../controllers/authController"), // this line imports all other exports from the module as they are
+    jest.mock("../../controllers/authController", () => ({
+        ...jest.requireActual("../../controllers/authController"), // this line imports all other exports from the module as they are
         signToken: jest.fn().mockReturnValue("fakeToken"),
     }));
-    jest.mock("../controllers/authController", () => {
-        const originalModule = jest.requireActual("../controllers/authController");
+    jest.mock("../../controllers/authController", () => {
+        const originalModule = jest.requireActual("../../controllers/authController");
         return {
             ...originalModule,
             signToken: jest.fn(), // Mock the signToken function
         };
     });
 
-    const authController = require("../controllers/authController");
+    const authController = require("../../controllers/authController");
 
     authController.signToken.mockImplementation(() => "test");
     const user = { _id: "123", password: "secret" };

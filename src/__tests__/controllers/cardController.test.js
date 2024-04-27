@@ -1,9 +1,9 @@
-const Card = require("./../models/cardModel");
-const { validateMaxNumberCards, createCard, deleteCard, listAllCards } = require("./../controllers/cardController");
-const AppError = require("../utils/appError");
+const { validateMaxNumberCards, createCard, deleteCard, listAllCards } = require("../../controllers/cardController");
+const Card = require("../../models/cardModel");
+const AppError = require("../../utils/appError");
 
 describe("Card Controller", () => {
-    jest.mock("./../models/cardModel");
+    jest.mock("../../models/cardModel");
 
     describe("validateMaxNumberCards", () => {
         const user = { _id: 5 };
