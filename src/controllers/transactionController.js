@@ -19,9 +19,9 @@ const depositFunds = async (req, res, next) => {
         if (amount < 0) return next(new AppError("You cannot work negative amount", 400));
 
         const card = await Card.findById(req.body.card_id);
-        if (!card) return next(new AppError("You don't have permissions on that card or the card doesn't exist", 400));
+        if (!card) return next(new AppError("You don't have permissions on that card or the card doesn't exist", 403));
         if (card.user._id.toString() !== req.user._id.toString())
-            return next(new AppError("You don't have permissions on that card or the card doesn't exist", 400));
+            return next(new AppError("You don't have permissions on that card or the card doesn't exist", 403));
 
         const deposit = await Deposit.create({ amount: amount, card_id: card._id });
         const newBalance = req.user.balance + amount;

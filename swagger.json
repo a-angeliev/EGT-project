@@ -1,0 +1,999 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "EGT Digital project api doc",
+    "description": "This is a simple project made with Exppres. Users have the opportunity to store their credit cards in their accounts, make deposits with them, and transfer funds to another user's accounts. ",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/auth/signup": {
+      "post": {
+        "summary": "Create new user",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string",
+                    "default": "Test"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "default": "Test"
+                  },
+                  "email": {
+                    "type": "string",
+                    "default": "test@test.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "12345"
+                  },
+                  "address": {
+                    "type": "string",
+                    "default": "ul. Test"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "default": "0879294766"
+                  },
+                  "birth_date": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "token": {
+                      "type": "string",
+                      "default": "token"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "default": "Object database ID"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "default": "Test"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "default": "Test"
+                        },
+                        "email": {
+                          "type": "string",
+                          "default": "test@test.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "default": "password hash"
+                        },
+                        "address": {
+                          "type": "string",
+                          "default": "ul. Test"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "default": "0879294766"
+                        },
+                        "birth_date": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "balance": {
+                          "type": "number",
+                          "default": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or invalid data error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Duplicate field: email, phone_number, etc."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "default": "test@test.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "12345"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "token": {
+                      "type": "string",
+                      "default": "token"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "default": "Object database ID"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "default": "Test"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "default": "Test"
+                        },
+                        "email": {
+                          "type": "string",
+                          "default": "test@test.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "default": "password hash"
+                        },
+                        "address": {
+                          "type": "string",
+                          "default": "ul. Test"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "default": "0879294766"
+                        },
+                        "birth_date": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "balance": {
+                          "type": "number",
+                          "default": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "You must provide email and password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Wrong email or password"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/card/create": {
+      "post": {
+        "summary": "Add credit card to the user account",
+        "tags": [
+          "Cards"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "string",
+                    "default": "4524421448425423"
+                  },
+                  "expiration_date": {
+                    "type": "string",
+                    "default": "12/25"
+                  },
+                  "cardholder_name": {
+                    "type": "string",
+                    "default": "Test Test"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "card_information": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "default": "Object database ID"
+                        },
+                        "user": {
+                          "type": "string",
+                          "default": "Object database ID"
+                        },
+                        "expiration_date": {
+                          "type": "string",
+                          "default": "12/25"
+                        },
+                        "cardholder_name": {
+                          "type": "string",
+                          "default": "Test Test"
+                        },
+                        "number": {
+                          "type": "string",
+                          "default": "************5423"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Duplicated fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Duplicate field: number. Please insert other value"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Invalid token. Please login or provide valid token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden it's not allow to have more than 5 credit cards per user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "User can have maximum 5 cards into the account. If you want to add new card to your account, you must delete any card before that."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/card/delete/{id}": {
+      "delete": {
+        "summary": "Delete credit card from the user account",
+        "tags": [
+          "Cards"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the card",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "string",
+                    "default": "4524421448425423"
+                  },
+                  "expiration_date": {
+                    "type": "string",
+                    "default": "12/25"
+                  },
+                  "cardholder_name": {
+                    "type": "string",
+                    "default": "Test Test"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "token": {
+                      "type": "string",
+                      "default": "token"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "default": "Object database ID"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "default": "Test"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "default": "Test"
+                        },
+                        "email": {
+                          "type": "string",
+                          "default": "test@test.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "default": "password hash"
+                        },
+                        "address": {
+                          "type": "string",
+                          "default": "ul. Test"
+                        },
+                        "phone_number": {
+                          "type": "string",
+                          "default": "0879294766"
+                        },
+                        "birth_date": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "balance": {
+                          "type": "number",
+                          "default": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Duplicated fields or invalid _id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Duplicate field: number. Please insert other value"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Invalid token. Please login or provide valid token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden it's not allow to have more than 5 credit cards per user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "User can have maximum 5 cards into the account. If you want to add new card to your account, you must delete any card before that."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/card": {
+      "get": {
+        "summary": "List all cards attached to the user account",
+        "tags": [
+          "Cards"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return user cards",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "cards": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "default": "Database Object Id"
+                          },
+                          "number": {
+                            "type": "string",
+                            "default": "************0801"
+                          },
+                          "cardholder_name": {
+                            "type": "string",
+                            "default": "Test Test"
+                          },
+                          "expiration_date": {
+                            "type": "string",
+                            "default": "12/25"
+                          },
+                          "user": {
+                            "type": "string",
+                            "default": "Database Object Id"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Invalid token. Please login or provide valid token."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transaction/deposit": {
+      "post": {
+        "summary": "Deposit funds to the user's account, using credit card attached to the user's account",
+        "tags": [
+          "Transactions"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "card_id": {
+                    "type": "string",
+                    "default": "Database Object Id"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "default": "1000"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "deposit": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "default": "Object database ID"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "default": "1000"
+                        },
+                        "card_id": {
+                          "type": "string",
+                          "default": "Object database ID"
+                        },
+                        "deposit_date": {
+                          "type": "string",
+                          "default": "2024-04-28T17:01:59.628Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validations errors or invalid _id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "You must provide amount and card_id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Invalid token. Please login or provide valid token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden it's not allowed to be used other user's cards or not existed once",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "You don't have permissions on that card or the card doesn't exist"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transaction/transfer": {
+      "post": {
+        "summary": "Transfer funds from user's account to the another user's account",
+        "tags": [
+          "Transactions"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "card_id": {
+                    "type": "string",
+                    "receiver_id": "Database Object Id"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "default": "1000"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Funds transferred",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validations, nonexisting user or not enough balance errors/validations ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "You must provide amount and receiver_id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Invalid token. Please login or provide valid token."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transaction": {
+      "get": {
+        "summary": "List all user's account transactions",
+        "tags": [
+          "Transactions"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return all user's account transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "transaction_as_sender": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "default": "Database Object Id"
+                          },
+                          "sender": {
+                            "type": "string",
+                            "default": "Database Object Id"
+                          },
+                          "receiver": {
+                            "type": "string",
+                            "default": "Database Object Id"
+                          },
+                          "amount": {
+                            "type": "string",
+                            "default": "100"
+                          },
+                          "transaction_date": {
+                            "type": "string",
+                            "default": "2024-04-27T13:12:16.418Z"
+                          }
+                        }
+                      }
+                    },
+                    "transaction_as_receiver": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "default": "Database Object Id"
+                          },
+                          "sender": {
+                            "type": "string",
+                            "default": "Database Object Id"
+                          },
+                          "receiver": {
+                            "type": "string",
+                            "default": "Database Object Id"
+                          },
+                          "amount": {
+                            "type": "string",
+                            "default": "100"
+                          },
+                          "transaction_date": {
+                            "type": "string",
+                            "default": "2024-04-27T13:12:16.418Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "default": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "Invalid token. Please login or provide valid token."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

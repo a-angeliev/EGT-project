@@ -18,7 +18,7 @@ const createCard = async (req, res, next) => {
             return next(
                 new AppError(
                     "User can have maximum 5 cards into the account. If you want to add new card to your account, you must delete any card before that.",
-                    400
+                    403
                 )
             );
         }
