@@ -110,6 +110,7 @@ describe("Error Controller", () => {
             });
         });
         it("expect response to be called with 500 status code if the error is not marked as operational", () => {
+            process.env.ENV = "TESTING";
             sendErrorProd(error, mockRes);
 
             expect(mockRes.status).toHaveBeenCalledWith(500);

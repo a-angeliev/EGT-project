@@ -43,7 +43,7 @@ const sendErrorProd = (err, res) => {
 
         // Programming or other unknown errors
     } else {
-        console.error("ERROR", err);
+        if (process.env.ENV !== "TESTING") console.error("ERROR", err);
 
         res.status(500).json({
             status: "error",

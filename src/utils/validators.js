@@ -12,7 +12,7 @@ const validateExpireDate = (value) => {
     const [month, year] = value.split("/");
     const currentYear = new Date().getFullYear() % 100; // Get current year (last two digits)
     const currentMonth = new Date().getMonth() + 1; // Get current month
-    return Number(year) > currentYear || (Number(year) === currentYear && Number(month) > currentMonth);
+    return Number(year) > currentYear || (Number(year) === currentYear && Number(month) >= currentMonth);
 };
 
 const validatePhoneNumber = (number) => {
