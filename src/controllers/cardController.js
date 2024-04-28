@@ -7,7 +7,6 @@ const validateMaxNumberCards = async (user) => {
     return false;
 };
 
-//TODO: There is no tests for this function
 const createCard = async (req, res, next) => {
     try {
         if (await validateMaxNumberCards(req.user)) {
