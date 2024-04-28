@@ -6,7 +6,7 @@ const xss = require("xss-clean");
 const authRouter = require("./src/routers/authRouter");
 const cardRouter = require("./src/routers/cardRouter");
 const transactionRouter = require("./src/routers/transactionRouter");
-const globalErrorHandler = require("./src/controllers/errorController");
+const { globalErrorHandler } = require("./src/controllers/errorController");
 
 const app = express();
 

@@ -34,14 +34,14 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
-    // Operational, trusted error: send message to client
+    // Operational, trusted errors
     if (err.isOperational) {
         res.status(err.statusCode).json({
             status: err.status,
             message: err.message,
         });
 
-        // Programming or other unknown error: don't leak error details
+        // Programming or other unknown errors
     } else {
         console.error("ERROR", err);
 
@@ -51,8 +51,8 @@ const sendErrorProd = (err, res) => {
         });
     }
 };
-
-module.exports = (err, req, res, next) => {
+// TODO: Have to be tested.
+const globalErrorHandler = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || "error";
 
@@ -71,4 +71,15 @@ module.exports = (err, req, res, next) => {
 
         sendErrorProd(error, res);
     }
+};
+
+module.exports = {
+    globalErrorHandler,
+    sendErrorDev,
+    sendErrorProd,
+    handleJWTError,
+    handleJWTExpiredError,
+    handleDuplicateFieldsDB,
+    handleValidationErrorDB,
+    handleCastErrorDB,
 };
