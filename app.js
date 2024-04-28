@@ -25,6 +25,10 @@ app.use("/api/v1/card", cardRouter);
 app.use("/api/v1/transaction", transactionRouter);
 app.use("/", swaggerRouter);
 
+app.all("*", (req, res, next) => {
+    next(new AppError("This endpoint does not exist!", 404));
+});
+
 // Global error handler
 app.use(globalErrorHandler);
 
