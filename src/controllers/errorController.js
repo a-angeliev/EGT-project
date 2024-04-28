@@ -1,4 +1,4 @@
-// const { serverErrorLogger } = require("../utils/logger");
+const { errorHandlerLogger } = require("../utils/logger");
 const AppError = require("./../utils/appError");
 
 const handleCastErrorDB = (err) => {
@@ -68,7 +68,7 @@ const globalErrorHandler = (err, req, res, next) => {
         if (err.name === "ValidationError") error = handleValidationErrorDB(error);
         if (err.name === "JsonWebTokenError") error = handleJWTError();
         if (err.name === "TokenExpiredError") error = handleJWTExpiredError();
-
+        errorHandlerLogger.log({ level: "error", message: `Error ${err}, Production error: ${error}` });
         sendErrorProd(error, res);
     }
 };

@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const Deposit = require("./../models/depositModel");
 const Card = require("./../models/cardModel");
 const Transaction = require("../models/transactionModel");
-const User = require("../models/userModel.js");
+const User = require("../models/userModel");
 const AppError = require("../utils/appError");
+const { depositFundsLogger, transactionFundsLogger } = require("../utils/logger");
 
 // I know is better to move the `try-catch` block as outside function.
 // Also the same `if states` from depositFunds and transferFunds,
@@ -26,9 +27,13 @@ const depositFunds = async (req, res, next) => {
         const newBalance = req.user.balance + amount;
 
         await User.findByIdAndUpdate(req.user._id, { balance: newBalance });
-
+        depositFundsLogger.log({
+            level: "info",
+            message: `User: ${req.user._id}, Old balance: ${req.user.balance}, New balance: ${newBalance}`,
+        });
         res.status(200).json({ status: "success", deposit });
     } catch (err) {
+        depositFundsLogger.log({ level: "error", message: err });
         next(err);
     }
 };
@@ -63,11 +68,16 @@ const transactionFunds = async (req, res, next) => {
         await session.commitTransaction();
         session.endSession();
 
+        transactionFundsLogger.log({
+            level: "info",
+            message: `Sender: ${req.user._id}, Receiver: ${receiver._id}, Amount: ${amount}, Sender old balance: ${req.user.balance}, Receiver old balance: ${receiver.balance}`,
+        });
         res.status(200).json({ status: "success" });
     } catch (err) {
         await session.abortTransaction();
         session.endSession();
 
+        transactionFundsLogger.log({ level: "error", message: err });
         next(err);
     }
 };

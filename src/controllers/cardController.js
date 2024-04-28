@@ -1,5 +1,6 @@
 const Card = require("./../models/cardModel");
 const AppError = require("./../utils/appError");
+const { createCardLogger, deleteCardLogger } = require("../utils/logger");
 
 const validateMaxNumberCards = async (user) => {
     const cards = await Card.find({ user: user._id });
@@ -11,6 +12,7 @@ const createCard = async (req, res, next) => {
     try {
         if (await validateMaxNumberCards(req.user)) {
             const new_card = await Card.create({ ...req.body, user: req.user._id });
+            createCardLogger.log({ level: "info", message: new_card });
             res.status(200).json({ status: "success", card_information: new_card });
         } else {
             return next(
@@ -21,6 +23,7 @@ const createCard = async (req, res, next) => {
             );
         }
     } catch (err) {
+        createCardLogger.log({ level: "error", message: err });
         next(err);
     }
 };
@@ -31,6 +34,7 @@ const deleteCard = async (req, res, next) => {
         const card = await Card.findById(id);
         if (card?.user._id.toString() === req.user._id.toString()) {
             await Card.findByIdAndDelete(id);
+            deleteCardLogger.log({ level: "info", message: `${(card, req.user._id)}` });
             res.status(204).json({ status: "success" });
         } else {
             return next(
@@ -38,6 +42,7 @@ const deleteCard = async (req, res, next) => {
             );
         }
     } catch (err) {
+        deleteCardLogger.log({ level: "error", message: err });
         next(err);
     }
 };

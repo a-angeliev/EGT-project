@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const AppError = require("./../utils/appError");
 const User = require("./../models/userModel");
+const { signupLogger, loginLogger } = require("../utils/logger");
 
 const signToken = (id) => {
     if (!id) throw new Error("Provide id to sign token!");
@@ -27,8 +28,10 @@ const signup = async (req, res, next) => {
         const newUser = await User.create({
             ...req.body,
         });
+        signupLogger.log({ level: "info", message: `${newUser}` });
         createSendToken(newUser, 201, res);
     } catch (err) {
+        signupLogger.log({ level: "error", message: `${err}` });
         next(err);
     }
 };
@@ -46,8 +49,10 @@ const login = async (req, res, next) => {
             return next(new AppError("Wrong email or password", 401));
         }
 
+        loginLogger.log({ level: "info", message: email });
         createSendToken(user, 200, res);
     } catch (err) {
+        loginLogger.log({ level: "info", message: err });
         next(err);
     }
 };
