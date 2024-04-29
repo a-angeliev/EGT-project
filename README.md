@@ -86,14 +86,14 @@ For the API documentation is used Swagger. You can see the documentation at: htt
 
 Database schema visualization:
 
-![Database diagram](EGT%20database%20.png)
+![Database diagram](./readme_images//EGT%20database%20.png)
 
 ## Interaction visualization
 
 User Authentication flow:
 
-![User Authentication](./User%20Interaction%20EGT%20diagrams%20authentication.drawio.png)
+![User Authentication](./readme_images/User%20Interaction%20EGT%20diagrams%20authentication.drawio.png)
 
 User Transaction/Deposit flow:
 
-![User Authentication](./User%20Interaction%20EGT%20diagrams%20transactions.drawio.png)
+![User Authentication](./readme_images/User%20Interaction%20EGT%20diagrams%20transactions.drawio.png)
