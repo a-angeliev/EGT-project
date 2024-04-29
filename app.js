@@ -8,6 +8,7 @@ const cardRouter = require("./src/routers/cardRouter");
 const transactionRouter = require("./src/routers/transactionRouter");
 const swaggerRouter = require("./src/routers/swaggerRouter");
 const { globalErrorHandler } = require("./src/controllers/errorController");
+const AppError = require("./src/utils/appError");
 
 const app = express();
 
