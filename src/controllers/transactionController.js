@@ -49,7 +49,6 @@ const transactionFunds = async (req, res, next) => {
         if (amount < 0) return next(new AppError("You cannot work negative amount", 400));
 
         const receiver = await User.findById(req.body.receiver_id);
-
         if (!receiver) return next(new AppError("This user does not exist", 400));
         if (req.user.balance < amount) return next(new AppError("Not enough balance", 400));
         if (req.user._id.toString() === receiver._id.toString())

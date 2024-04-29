@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 const User = require("../../models/userModel");
 const AppError = require("../../utils/appError");
 const { signup, signToken, createSendToken, protectMiddleware, login } = require("../../controllers/authController");

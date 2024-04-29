@@ -38,7 +38,7 @@ const deleteCard = async (req, res, next) => {
             res.status(204).json({ status: "success" });
         } else {
             return next(
-                new AppError("You don't have permissions to delete this card or this card doesn't exist!", 401)
+                new AppError("You don't have permissions to delete this card or this card doesn't exist!", 403)
             );
         }
     } catch (err) {
